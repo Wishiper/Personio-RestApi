@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class HierarchyApplication {
 
 	public static void main(String[] args) {
+		System.out.println("Starting Hierarchy Project ...");
 		SpringApplication.run(HierarchyApplication.class, args);
 	}
 
