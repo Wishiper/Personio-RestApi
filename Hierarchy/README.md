@@ -9,9 +9,9 @@ To run this application:
         
     2. Run docker container with the created image
     - docker run -p 8090:8090 spring-boot-hierarchy.jar
-      (-p 8090:8090 you can choose the port the application should run on)
-    
-    3. To stop the container you can list all containers with "docker ps" command
+      <br /> With this "-p 8090:8090" you can choose the port the application should run on
+
+     3. To stop the container you can list all containers with "docker ps" command
     and run "docker stop {name of container}" with the name of the container
        
 3. You can try out the endpoints with the Postman collection included in the project
