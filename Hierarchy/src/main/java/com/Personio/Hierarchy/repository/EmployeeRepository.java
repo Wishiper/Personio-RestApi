@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Employee findEmployeeByName(String name);
+    Employee findEmployeeBySupervisorId(int supervisorId);
 
     boolean existsByName(String name);
 }

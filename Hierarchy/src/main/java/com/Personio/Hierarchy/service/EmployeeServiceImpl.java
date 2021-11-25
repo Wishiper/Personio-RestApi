@@ -23,6 +23,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployees(Map<String, String> employeeMap) {
         createNewEmployees(employeeMap);
         assignSupervisorIds(employeeMap);
+        Employee rootEmployee = employeeRepository.findEmployeeBySupervisorId(0);
+        createResponse(rootEmployee, employeeMap);
 
     }
 
@@ -67,6 +69,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             Employee emp = employeeRepository.findEmployeeByName(employee.getKey());
             Employee supervisor = employeeRepository.findEmployeeByName(employee.getValue());
             emp.setSupervisorId(supervisor.getEmployeeId());
+
+            supervisor.getSubordinateNames().add(emp.getName());  // Adding subordinate to supervisor
+
+            employeeRepository.save(supervisor);
             employeeRepository.save(emp);
         }
     }
