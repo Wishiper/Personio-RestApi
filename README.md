@@ -1,8 +1,4 @@
 # Personio-RestApi
-Test project for Personio
-
-
-# Personio-RestApi
 
 To run this application:
 1. You can either  checkout the project and run it from the main class.
