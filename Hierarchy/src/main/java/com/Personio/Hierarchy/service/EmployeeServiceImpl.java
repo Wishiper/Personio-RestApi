@@ -1,6 +1,7 @@
 package com.Personio.Hierarchy.service;
 
 import com.Personio.Hierarchy.model.Employee;
+import com.Personio.Hierarchy.model.dto.GetSupervisorsResponseDto;
 import com.Personio.Hierarchy.repository.EmployeeRepository;
 import com.Personio.Hierarchy.service.base.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         assignSupervisorIds(employeeMap);
         Employee rootEmployee = employeeRepository.findEmployeeBySupervisorId(0);
         Map<String, Set<String>> map = new LinkedHashMap<>();
-//
+
         return createHieararchy(rootEmployee, map);
 
     }
@@ -57,6 +58,35 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getEmployeeList() {
         return employeeRepository.findAll();
     }
+
+    @Override
+    public GetSupervisorsResponseDto getSupervisors(String name) {
+        GetSupervisorsResponseDto responseDto = new GetSupervisorsResponseDto();
+
+        String supervisorName = getSupervisorName(name);
+        String supervisorManager = getSupervisorName(supervisorName);
+
+        responseDto.setEmployeeName(name);
+        responseDto.setEmployeeSupervisor(supervisorName);
+        responseDto.setSupervisorManager(supervisorManager);
+
+        return responseDto;
+    }
+
+    public String getSupervisorName(String employeeName){
+        if(employeeName.equals("No Supervisor")){
+            return "No Supervisor";
+        }
+        Employee employee = employeeRepository.findEmployeeByName(employeeName); //TODO add exception if employee doesn't exist
+        Optional<Employee> supervisor = employeeRepository.findById(employee.getSupervisorId());
+        if(supervisor.isPresent()){
+            return supervisor.get().getName();
+        }
+
+        return "No Supervisor";
+
+    }
+
 
     /**
      * Creates new employees only with unique names, that don't already exist in the DB.

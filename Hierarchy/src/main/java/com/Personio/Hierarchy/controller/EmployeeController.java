@@ -1,6 +1,7 @@
 package com.Personio.Hierarchy.controller;
 
 import com.Personio.Hierarchy.model.Employee;
+import com.Personio.Hierarchy.model.dto.GetSupervisorsResponseDto;
 import com.Personio.Hierarchy.service.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +15,24 @@ import java.util.Set;
 public class EmployeeController {
 
     @Autowired
-    EmployeeServiceImpl hierarchyService;
+    EmployeeServiceImpl employeeService;
 
     @PostMapping
     public Map<String, Set<String>> updateEmployees(@RequestBody Map<String, String> employeeMap) {
 
-       return hierarchyService.updateEmployees(employeeMap);
+       return employeeService.updateEmployees(employeeMap);
     }
 
-    @GetMapping("/id")
-    public void getEmployeeById() {
+    @GetMapping("/{name}")
+    public GetSupervisorsResponseDto getEmployeeSupervisorsByName(@PathVariable String name) {
+
+        return employeeService.getSupervisors(name);
 
     }
 
     @GetMapping()
     public List<Employee> getEmployees() {
-        return hierarchyService.getEmployeeList();
+        return employeeService.getEmployeeList();
 
     }
 }
