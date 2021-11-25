@@ -5,7 +5,7 @@ Test project for Personio
 # Personio-RestApi
 
 To run this application:
-1. You can either run the HierarchyApplication.class from your IDE
+1. You can either  checkout the project and run it from the main class.
 2. Or run in docker container following these instructions
     1. Create docker image - run this command in terminal:
        - docker build -t spring-boot-hierarchy.jar:latest .
