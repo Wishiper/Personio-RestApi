@@ -17,5 +17,10 @@ To run this application:
 3. You can try out the endpoints with the Postman collection included in the project
 - Personio.postman_collection.json
 
+4. Application has basic authentication and you can configure the username 
+   and password in application.properties file. Defaults are - username: user ; password: password
+   
+5. If you are calling the endpoints from postman, you should click on Authorization, select type Basic-Auth and enter the username and password.
+
 If you are new to docker you can check out https://docs.docker.com/get-started/
     

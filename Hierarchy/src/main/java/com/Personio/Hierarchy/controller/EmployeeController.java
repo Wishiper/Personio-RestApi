@@ -23,7 +23,7 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<Object> updateEmployees(@RequestBody Map<String, String> employeeMap) {
 
-       JSONObject jsObj = employeeService.updateEmployees(employeeMap);
+        JSONObject jsObj = employeeService.updateEmployees(employeeMap);
         return new ResponseEntity<>(jsObj.toMap(), HttpStatus.OK);
     }
 

@@ -1,5 +1,6 @@
 package com.Personio.Hierarchy.service;
 
+import com.Personio.Hierarchy.exception.ApiRequestException;
 import com.Personio.Hierarchy.model.Employee;
 import com.Personio.Hierarchy.model.dto.GetSupervisorsResponseDto;
 import com.Personio.Hierarchy.repository.EmployeeRepository;
@@ -16,6 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    private static final String EMPLOYEE_NOT_FOUND = "Employee with name: %s does not exist";
+
     /**
      * Creates new employees and assigns their supervisors.
      *
@@ -30,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee rootEmployee = employeeRepository.findEmployeeBySupervisorId(0);
         JSONObject subEmployees = buildResponse(rootEmployee); // build Hierarchy json from employees
 
-        return new JSONObject().put(rootEmployee.getName(),subEmployees);
+        return new JSONObject().put(rootEmployee.getName(), subEmployees);
 
     }
 
@@ -75,13 +78,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         return responseDto;
     }
 
-    public String getSupervisorName(String employeeName){
-        if(employeeName.equals("No Supervisor")){
+    public String getSupervisorName(String employeeName) {
+        if (employeeName.equals("No Supervisor")) {
             return "No Supervisor";
         }
-        Employee employee = employeeRepository.findEmployeeByName(employeeName); //TODO add exception if employee doesn't exist
+        Employee employee = employeeRepository.findEmployeeByName(employeeName);
+        if (employee == null) {
+            throw new ApiRequestException(String.format(EMPLOYEE_NOT_FOUND, employeeName));
+        }
+
         Optional<Employee> supervisor = employeeRepository.findById(employee.getSupervisorId());
-        if(supervisor.isPresent()){
+        if (supervisor.isPresent()) {
             return supervisor.get().getName();
         }
 
