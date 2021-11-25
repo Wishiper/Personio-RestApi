@@ -4,13 +4,14 @@ import com.Personio.Hierarchy.model.Employee;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Base methods for the Hierarchy Service.
  */
 public interface EmployeeService {
 
-    void updateEmployees(Map<String, String> employeeMap);
+    Map<String, Set<String>> updateEmployees(Map<String, String> employeeMap);
 
     List<Employee> getEmployeeList();
 }

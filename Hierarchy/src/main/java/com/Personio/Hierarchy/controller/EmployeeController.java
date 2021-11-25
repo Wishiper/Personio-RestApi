@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -16,9 +17,9 @@ public class EmployeeController {
     EmployeeServiceImpl hierarchyService;
 
     @PostMapping
-    public void updateEmployees(@RequestBody Map<String, String> employeeMap) {
+    public Map<String, Set<String>> updateEmployees(@RequestBody Map<String, String> employeeMap) {
 
-        hierarchyService.updateEmployees(employeeMap);
+       return hierarchyService.updateEmployees(employeeMap);
     }
 
     @GetMapping("/id")

@@ -18,14 +18,34 @@ public class EmployeeServiceImpl implements EmployeeService {
      * Creates new employees and assigns their supervisors.
      *
      * @param employeeMap Map of employees and their supervisors.
+     * @return Hierarchy map of employee and their subordinates
      */
     @Override
-    public void updateEmployees(Map<String, String> employeeMap) {
+    public Map<String, Set<String>> updateEmployees(Map<String, String> employeeMap) {
         createNewEmployees(employeeMap);
         assignSupervisorIds(employeeMap);
         Employee rootEmployee = employeeRepository.findEmployeeBySupervisorId(0);
-        createResponse(rootEmployee, employeeMap);
+        Map<String, Set<String>> map = new LinkedHashMap<>();
+//
+        return createHieararchy(rootEmployee, map);
 
+    }
+
+    public Map<String, Set<String>> createHieararchy(Employee rootEmployee, Map<String, Set<String>> map) {
+        Set<String> subs = rootEmployee.getSubordinateNames();
+        if (rootEmployee.getEmployeeId() == 0) {
+            map.put(rootEmployee.getName(), subs);
+        }
+        if (subs.size() == 0) {
+            return map;
+        }
+        for (String employeeName : subs) {
+            map.put(rootEmployee.getName(), subs);
+            Employee newRoot = employeeRepository.findEmployeeByName(employeeName);
+            createHieararchy(newRoot, map);
+
+        }
+        return map;
     }
 
     /**
