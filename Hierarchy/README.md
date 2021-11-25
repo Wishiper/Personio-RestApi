@@ -8,8 +8,8 @@ To run this application:
        - Run "docker images" command to check if an image has been created
         
     2. Run docker container with the created image
-    - docker run -p 8090:8090 spring-boot-hierarchy.jar
-      <br /> With this "-p 8090:8090" you can choose the port the application should run on
+        - docker run -p 8090:8090 spring-boot-hierarchy.jar
+      <br /> By changing "-p 8090:8090" you can choose the port the application should run on
 
      3. To stop the container you can list all containers with "docker ps" command
     and run "docker stop {name of container}" with the name of the container
