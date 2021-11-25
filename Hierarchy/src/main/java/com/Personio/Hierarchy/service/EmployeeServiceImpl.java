@@ -4,6 +4,7 @@ import com.Personio.Hierarchy.model.Employee;
 import com.Personio.Hierarchy.model.dto.GetSupervisorsResponseDto;
 import com.Personio.Hierarchy.repository.EmployeeRepository;
 import com.Personio.Hierarchy.service.base.EmployeeService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,31 +23,32 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return Hierarchy map of employee and their subordinates
      */
     @Override
-    public Map<String, Set<String>> updateEmployees(Map<String, String> employeeMap) {
+    public JSONObject updateEmployees(Map<String, String> employeeMap) {
         createNewEmployees(employeeMap);
         assignSupervisorIds(employeeMap);
-        Employee rootEmployee = employeeRepository.findEmployeeBySupervisorId(0);
-        Map<String, Set<String>> map = new LinkedHashMap<>();
 
-        return createHieararchy(rootEmployee, map);
+        Employee rootEmployee = employeeRepository.findEmployeeBySupervisorId(0);
+        JSONObject subEmployees = buildResponse(rootEmployee); // build Hierarchy json from employees
+
+        return new JSONObject().put(rootEmployee.getName(),subEmployees);
 
     }
 
-    public Map<String, Set<String>> createHieararchy(Employee rootEmployee, Map<String, Set<String>> map) {
+    public JSONObject buildResponse(Employee rootEmployee) {
+
+        JSONObject jsonEmployee = new JSONObject();
+
         Set<String> subs = rootEmployee.getSubordinateNames();
-        if (rootEmployee.getEmployeeId() == 0) {
-            map.put(rootEmployee.getName(), subs);
-        }
-        if (subs.size() == 0) {
-            return map;
-        }
         for (String employeeName : subs) {
-            map.put(rootEmployee.getName(), subs);
             Employee newRoot = employeeRepository.findEmployeeByName(employeeName);
-            createHieararchy(newRoot, map);
+            if (newRoot.getSubordinateNames().size() == 0) {
+                jsonEmployee.put(employeeName, new JSONObject());
+                continue;
+            }
+            jsonEmployee.put(employeeName, buildResponse(newRoot));
 
         }
-        return map;
+        return jsonEmployee;
     }
 
     /**
